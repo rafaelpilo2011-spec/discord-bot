@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -6,7 +7,7 @@ import { checkCooldown } from '../utils/cooldown';
 export const data = new SlashCommandBuilder()
   .setName('antiraid_simular')
   .setDescription('Simula um evento de raid com dados sintéticos')
-  .setDefaultMemberPermissions(['ManageGuild'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
   .addStringOption((option: any) =>
     option
       .setName('tipo')

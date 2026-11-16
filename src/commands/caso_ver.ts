@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -7,7 +8,7 @@ import { CaseService } from '../services/case.service';
 export const data = new SlashCommandBuilder()
   .setName('caso_ver')
   .setDescription('Exibe detalhes de um caso de moderação')
-  .setDefaultMemberPermissions(['ModerateMembers'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
   .addStringOption((option: any) => option.setName('id').setDescription('ID do caso').setRequired(true));
 
 export const handler: RegisteredCommand['handler'] = async (interaction: any, client: any, settings: any) => {

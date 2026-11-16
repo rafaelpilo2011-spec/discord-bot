@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, infoReply, warningReply } from '../utils/responses';
@@ -7,7 +8,7 @@ import { CaseService, WarningService } from '../services/case.service';
 export const data = new SlashCommandBuilder()
   .setName('avisos_listar')
   .setDescription('Lista avisos de um membro')
-  .setDefaultMemberPermissions(['ModerateMembers'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
   .addUserOption((option: any) => option.setName('membro').setDescription('Membro').setRequired(true));
 
 export const handler: RegisteredCommand['handler'] = async (interaction: any, client: any, settings: any) => {

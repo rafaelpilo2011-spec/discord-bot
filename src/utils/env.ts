@@ -26,7 +26,6 @@ export const REQUIRED_INTENTS = [
   'GuildMessages',
   'MessageContent',
   'GuildModeration',
-  'GuildBans',
   'GuildEmojisAndStickers',
   'GuildVoiceStates',
   'DirectMessages',

@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -6,7 +7,7 @@ import { checkCooldown } from '../utils/cooldown';
 export const data = new SlashCommandBuilder()
   .setName('canal_desbloquear')
   .setDescription('Desbloqueia o canal atual')
-  .setDefaultMemberPermissions(['ManageChannels'] as any);
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels);
 
 export const handler: RegisteredCommand['handler'] = async (interaction: any, client: any, settings: any) => {
   const key = `canal_desbloquear_${interaction.user.id}`;

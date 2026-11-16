@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -7,7 +8,7 @@ import { CaseService, WarningService } from '../services/case.service';
 export const data = new SlashCommandBuilder()
   .setName('avisos_remover')
   .setDescription('Remove um aviso pelo ID')
-  .setDefaultMemberPermissions(['ModerateMembers'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
   .addStringOption((option: any) => option.setName('id').setDescription('ID do aviso').setRequired(true))
   .addStringOption((option: any) => option.setName('motivo').setDescription('Motivo da remoção').setRequired(true));
 

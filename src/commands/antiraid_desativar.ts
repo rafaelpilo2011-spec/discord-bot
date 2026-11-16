@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -7,7 +8,7 @@ import { GuildConfigService } from '../services/guildConfig.service';
 export const data = new SlashCommandBuilder()
   .setName('antiraid_desativar')
   .setDescription('Desativa a proteção contra raids')
-  .setDefaultMemberPermissions(['ManageGuild'] as any);
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
 export const handler: RegisteredCommand['handler'] = async (interaction: any, client: any, settings: any) => {
   const key = `antiraid_desativar_${interaction.user.id}`;

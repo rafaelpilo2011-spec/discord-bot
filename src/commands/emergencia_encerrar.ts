@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -6,7 +7,7 @@ import { checkCooldown } from '../utils/cooldown';
 export const data = new SlashCommandBuilder()
   .setName('emergencia_encerrar')
   .setDescription('Encerra o modo de emergência e restaura alterações do bot')
-  .setDefaultMemberPermissions(['ManageGuild'] as any);
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
 export const handler: RegisteredCommand['handler'] = async (interaction: any, client: any, settings: any) => {
   const key = `emergencia_encerrar_${interaction.user.id}`;

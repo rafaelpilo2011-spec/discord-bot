@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -8,7 +9,7 @@ import { ModerationService } from '../services/moderation.service';
 export const data = new SlashCommandBuilder()
   .setName('timeout_aplicar')
   .setDescription('Aplica timeout a um membro')
-  .setDefaultMemberPermissions(['ModerateMembers'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
   .addUserOption((option: any) => option.setName('membro').setDescription('Membro').setRequired(true))
   .addIntegerOption((option: any) => option.setName('duracao').setDescription('Duração em minutos').setRequired(true).setMinValue(1).setMaxValue(40320))
   .addStringOption((option: any) => option.setName('motivo').setDescription('Motivo').setRequired(true));

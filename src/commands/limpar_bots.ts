@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -6,7 +7,7 @@ import { checkCooldown } from '../utils/cooldown';
 export const data = new SlashCommandBuilder()
   .setName('limpar_bots')
   .setDescription('Limpa mensagens de bots')
-  .setDefaultMemberPermissions(['ManageMessages'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
   .addIntegerOption((option: any) =>
     option.setName('quantidade').setDescription('Quantidade a analisar').setRequired(true).setMinValue(1).setMaxValue(100)
   );

@@ -1,0 +1,16 @@
+Correções locais para inicialização na Altare
+
+Validado: geração do Prisma Client, compilação TypeScript, serialização de 35 comandos, carregamento de eventos, autorização de slash commands e primeira configuração (com mocks, sem rede Discord).
+Corrigido: entrada do bot, carregamento .js/.ts, conexão real PostgreSQL, permissões dos comandos, lockfile, Dockerfile e registro de comandos.
+Dependência zod não utilizada removida.
+
+Pendente: publicação no GitHub, implantação na Altare, variáveis secretas, banco real e teste no Discord. Nenhuma alteração foi enviada ao GitHub ou à Altare.
+
+Build: npm ci --include=dev; npx prisma generate; npm run build
+Inicialização: npm start
+Teste local sem Discord: node scripts/check-startup.cjs
+Banco NOVO e vazio: npx prisma db push (não executar em banco existente sem revisão e backup).
+Variáveis: DISCORD_TOKEN, CLIENT_ID, GUILD_ID, DATABASE_URL. Use .env.example apenas como referência; não publique segredos.
+O Dockerfile compila o código e gera o cliente no Linux; não depende do node_modules ou dist enviados ao GitHub.
+
+Limitações existentes: o botão do painel /configurar não tem implementação de interação; a proteção antiraid apenas registra alertas em applyProtectionAction. O projeto não implementa integralmente o prompt original. A validação acima não certifica todos os comandos, moderação, restauração de canais ou uso em produção.

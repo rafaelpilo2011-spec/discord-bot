@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -6,7 +7,7 @@ import { checkCooldown } from '../utils/cooldown';
 export const data = new SlashCommandBuilder()
   .setName('canal_recriar')
   .setDescription('Recria o canal atual (desativado por padrão)')
-  .setDefaultMemberPermissions(['Administrator'] as any);
+  .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
 export const handler: RegisteredCommand['handler'] = async (interaction: any, client: any, settings: any) => {
   const key = `canal_recriar_${interaction.user.id}`;

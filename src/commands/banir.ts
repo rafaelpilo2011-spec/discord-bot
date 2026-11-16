@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -8,7 +9,7 @@ import { ModerationService } from '../services/moderation.service';
 export const data = new SlashCommandBuilder()
   .setName('banir')
   .setDescription('Bane um membro do servidor')
-  .setDefaultMemberPermissions(['BanMembers'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
   .addUserOption((option: any) => option.setName('membro').setDescription('Membro').setRequired(true))
   .addStringOption((option: any) => option.setName('motivo').setDescription('Motivo').setRequired(true))
   .addIntegerOption((option: any) => option.setName('dias').setDescription('Dias de histórico para apagar').setMinValue(0).setMaxValue(7));

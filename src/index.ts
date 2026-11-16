@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits, Partials, Collection } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord.js';
-import { connectDb, disconnectDb } from './utils/db';
+import { prisma, connectDb, disconnectDb } from './utils/db';
 import { DISCORD_TOKEN, CLIENT_ID, GUILD_ID, REQUIRED_INTENTS } from './utils/env';
 import { AntiRaidService } from './services/antiRaid.service';
 import { RaidService } from './services/raid.service';
@@ -27,13 +27,7 @@ export class DiscordBot extends Client {
   async start() {
     await connectDb();
 
-    // Prisma será injetado externamente ou via require
-    try {
-      const { prisma } = require('./utils/db');
-      this.prisma = prisma;
-    } catch {
-      this.prisma = { $connect: async () => {}, $disconnect: async () => {} };
-    }
+    this.prisma = prisma;
 
     this.raidService = new RaidService(this.prisma);
     this.caseService = new CaseService(this.prisma);
@@ -51,7 +45,7 @@ export class DiscordBot extends Client {
     const commands: any[] = [];
     const commandsPath = pathJoin(__dirname, 'commands');
     const { readdirSync } = await import('fs');
-    const files = readdirSync(commandsPath).filter((f: string) => f.endsWith('.ts'));
+    const files = readdirSync(commandsPath).filter((f: string) => f.endsWith(__filename.endsWith('.ts') ? '.ts' : '.js') && !f.endsWith('.d.ts'));
 
     for (const file of files) {
       const mod = await import(pathJoin(commandsPath, file));
@@ -62,6 +56,7 @@ export class DiscordBot extends Client {
       }
     }
 
+    if (!commands.length) throw new Error('Nenhum comando encontrado; execute npm run build.');
     const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN!);
 
     try {
@@ -73,14 +68,15 @@ export class DiscordBot extends Client {
         console.log('[CMD] Comandos registrados globalmente.');
       }
     } catch (error) {
-      console.error('[CMD] Erro ao registrar comandos:', error);
+      console.error('[CMD] Falha ao registrar comandos; confira token, CLIENT_ID e GUILD_ID.');
+      throw new Error('Registro de comandos falhou');
     }
   }
 
   async registerEvents() {
     const eventsPath = pathJoin(__dirname, 'events');
     const { readdirSync } = await import('fs');
-    const files = readdirSync(eventsPath).filter((f: string) => f.endsWith('.ts'));
+    const files = readdirSync(eventsPath).filter((f: string) => f.endsWith(__filename.endsWith('.ts') ? '.ts' : '.js') && !f.endsWith('.d.ts'));
 
     for (const file of files) {
       const mod = await import(pathJoin(eventsPath, file));
@@ -99,4 +95,24 @@ export class DiscordBot extends Client {
     await disconnectDb();
     console.log('[BOT] Encerrado.');
   }
+}
+
+if (require.main === module) {
+  const bot = new DiscordBot();
+  bot.start().catch(async () => {
+    console.error('[BOT] Falha ao iniciar. Verifique banco, variáveis, intents e registro de comandos.');
+    await bot.stop().catch(() => {});
+    process.exit(1);
+  });
+  let stopping = false;
+  const shutdown = async () => {
+    if (stopping) return;
+    stopping = true;
+    const timeout = setTimeout(() => process.exit(1), 10000);
+    timeout.unref();
+    try { await bot.stop(); process.exitCode = 0; }
+    catch { process.exitCode = 1; }
+  };
+  process.once('SIGINT', shutdown);
+  process.once('SIGTERM', shutdown);
 }

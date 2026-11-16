@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -8,7 +9,7 @@ import { ModerationService } from '../services/moderation.service';
 export const data = new SlashCommandBuilder()
   .setName('avisar')
   .setDescription('Adiciona um aviso a um membro')
-  .setDefaultMemberPermissions(['ModerateMembers'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
   .addUserOption((option: any) => option.setName('membro').setDescription('Membro a ser avisado').setRequired(true))
   .addStringOption((option: any) => option.setName('motivo').setDescription('Motivo do aviso').setRequired(true));
 

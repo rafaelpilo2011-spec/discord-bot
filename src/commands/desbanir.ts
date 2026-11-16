@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -7,7 +8,7 @@ import { CaseService } from '../services/case.service';
 export const data = new SlashCommandBuilder()
   .setName('desbanir')
   .setDescription('Remove o banimento de um usuário')
-  .setDefaultMemberPermissions(['BanMembers'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
   .addStringOption((option: any) => option.setName('usuario_id').setDescription('ID do usuário').setRequired(true))
   .addStringOption((option: any) => option.setName('motivo').setDescription('Motivo').setRequired(true));
 

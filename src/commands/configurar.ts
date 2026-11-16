@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, infoReply, warningReply, buildConfirmRow } from '../utils/responses';
@@ -7,7 +8,7 @@ import { GuildConfigService } from '../services/guildConfig.service';
 export const data = new SlashCommandBuilder()
   .setName('configurar')
   .setDescription('Abre o painel de configuração do servidor')
-  .setDefaultMemberPermissions(['ManageGuild'] as any);
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
 export const handler: RegisteredCommand['handler'] = async (interaction: any, client: any, settings: any) => {
   const key = `config_${interaction.user.id}`;

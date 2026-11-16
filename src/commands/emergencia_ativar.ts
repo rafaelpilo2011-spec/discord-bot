@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -6,7 +7,7 @@ import { checkCooldown } from '../utils/cooldown';
 export const data = new SlashCommandBuilder()
   .setName('emergencia_ativar')
   .setDescription('Ativa o modo de contenção de emergência')
-  .setDefaultMemberPermissions(['ManageGuild'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
   .addIntegerOption((option: any) =>
     option.setName('duracao').setDescription('Duração em minutos').setRequired(false).setMinValue(1).setMaxValue(1440)
   );

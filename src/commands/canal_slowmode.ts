@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord.js';
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { RegisteredCommand } from '../types';
 import { errorReply, successReply, warningReply } from '../utils/responses';
@@ -6,7 +7,7 @@ import { checkCooldown } from '../utils/cooldown';
 export const data = new SlashCommandBuilder()
   .setName('canal_slowmode')
   .setDescription('Define slowmode no canal')
-  .setDefaultMemberPermissions(['ManageChannels'] as any)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
   .addIntegerOption((option: any) =>
     option.setName('segundos').setDescription('Segundos de slowmode').setRequired(true).setMinValue(0).setMaxValue(21600)
   );
