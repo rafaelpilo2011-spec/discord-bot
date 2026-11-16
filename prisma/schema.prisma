@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GuildConfig {
+  id                String   @id @default(cuid())
+  guildId           String   @unique
+  language          String   @default("pt-BR")
+  timezone          String   @default("America/Sao_Paulo")
+  logChannelId      String?
+  modRoleId         String?
+  adminRoleId       String?
+  welcomeChannelId  String?
+  defaultRoleId     String?
+  quarantineRoleId  String?
+  ignoredChannelIds String   @default("[]")
+  ignoredRoleIds    String   @default("[]")
+  raidMode          String   @default("monitor") // monitor, protect, emergency
+  raidEnabled       Boolean  @default(true)
+  spamLimit         Int      @default(5)
+  spamWindowSeconds Int      @default(10)
+  maxMentions       Int      @default(5)
+  maxLinks          Int      @default(3)
+  maxNewAccounts    Int      @default(5)
+  newAccountWindow  Int      @default(300) // 5 minutos em segundos
+  emergencyActive   Boolean  @default(false)
+  emergencyEndsAt   DateTime?
+  retentionDays     Int      @default(30)
+  notifyDm          Boolean  @default(true)
+  dmOnModeration    Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  cases             Case[]
+  warnings          Warning[]
+  raids             RaidEvent[]
+  configs           ConfigHistory[]
+}
+
+model Case {
+  id          String   @id @default(cuid())
+  guildId     String
+  type        String   // warn, timeout, kick, ban, unban, quarantine, auto
+  moderatorId String   // ID do moderador ou "auto"
+  targetId    String
+  reason      String
+  duration    Int?     // minutos para timeout
+  result      String   // success, failed, partial
+  details     String?  @default("{}")
+  createdAt   DateTime @default(now())
+
+  guild       GuildConfig @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  warnings    Warning[]
+}
+
+model Warning {
+  id        String   @id @default(cuid())
+  guildId   String
+  caseId    String   @unique
+  userId    String
+  moderatorId String
+  reason    String
+  createdAt DateTime @default(now())
+
+  guild     GuildConfig @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  case      Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+model RaidEvent {
+  id        String   @id @default(cuid())
+  guildId   String
+  type      String   // join_spike, new_accounts, message_spam, mentions, links, channels, roles, bans, webhooks
+  severity  String   // low, medium, high, critical
+  signalScore Int    @default(0)
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+  resolved  Boolean  @default(false)
+  actionTaken String?
+
+  guild     GuildConfig @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+}
+
+model ConfigHistory {
+  id        String   @id @default(cuid())
+  guildId   String
+  action    String   // export, import, restore
+  actorId   String
+  details   String   @default("{}")
+  createdAt DateTime @default(now())
+
+  guild     GuildConfig @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+}
+
+model Report {
+  id        String   @id @default(cuid())
+  guildId   String
+  reporterId String
+  targetId  String
+  reason    String
+  channelId String?
+  messageId String?
+  status    String   @default("open") // open, closed, dismissed
+  createdAt DateTime @default(now())
+}
